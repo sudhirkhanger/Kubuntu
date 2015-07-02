@@ -149,10 +149,10 @@
 	[Source](http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
 
-##########################################
-##########################################
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-# Kubuntu
+# Old Kubuntu
 
 #lm-sensors
 
