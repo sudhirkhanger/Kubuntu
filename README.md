@@ -104,10 +104,14 @@
 
 	wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	sudo apt-get update
-	deb http://download.virtualbox.org/virtualbox/debian trusty contrib > /etc/apt/sources.list.d
 	sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian trusty contrib' >> /etc/apt/sources.list.d/oracle-virtualbox.list"
 	sudo apt-get install virtualbox-4.3
-	usermod -a -G vboxusers $USER
+	sudo usermod -a -G vboxusers $USER
+
+## Genymotion
+
+	chmod +x genymotion-2.5.2_x64.bin
+	./genymotion-2.5.2_x64.bin
 
 ## Qt Creater
 
