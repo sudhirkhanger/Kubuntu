@@ -5,36 +5,41 @@
     
 ## Thinkfan
 
-	sudo apt-get install thinkfan
-	echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkfan.conf
+    sudo apt-get install thinkfan
+    echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkfan.conf
 
-	/etc/default/thinkfan
-	START=yes
-	DAEMON_ARGS="-q -b 1 -s 3"
+    /etc/default/thinkfan
+    START=yes
+    DAEMON_ARGS="-q -b 1 -s 3"
 
-	/etc/thinkfan.conf
-	find /sys/devices -type f -name "temp*_input"
+    /etc/thinkfan.conf
+    find /sys/devices -type f -name "temp*_input"
 
-	cat /proc/acpi/ibm/thermal
+    cat /proc/acpi/ibm/thermal
 	
 [Source](http://thinkwiki.de/Thinkfan)
 
 ## Temperature Sensors Widget
 
-	sudo apt-get install lm-sensors plasma-scriptengine-python
-	sudo sensors-detect
+    sudo apt-get install lm-sensors plasma-scriptengine-python
+    sudo sensors-detect
 
 ## Nvidia Optimus
 
-	sudo apt-get install bumblebee bumblebee-nvidia primus linux-headers-generic
+    sudo apt-get install bumblebee bumblebee-nvidia primus linux-headers-generic
+    
+## VDPAU VAAPI
+
+    sudo apt-get install libvdpau1 vdpau-va-driver i965-va-driver vdpauinfo vainfo libvdpau-va-gl1
+    echo 'export VDPAU_DRIVER=va_gl' > ~/.bash_aliases
   
 ## Plasma Widgets
 
-	sudo apt-get install plasma-widget-homerun-kicker plasma-widget-redshift redshift
+    sudo apt-get install plasma-widget-homerun-kicker plasma-widget-redshift redshift
   
 ## Emacs
 
-	sudo apt-get install emacs markdown emacs-goodies-el
+    sudo apt-get install emacs markdown emacs-goodies-el
   
 ## Plasma Apps
 
