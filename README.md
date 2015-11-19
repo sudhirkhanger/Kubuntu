@@ -169,3 +169,14 @@
 	
 [Source](http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 	
+
+## Xresources
+
+	! Xft settings ---------------------------------------------------------------
+	Xft.dpi:        96
+	Xft.antialias:  true
+	!Xft.rgba:      rgb
+	Xft.rgba:       none
+	Xft.hinting:    true
+	Xft.hintstyle:  hintslight
+	Xft.lcdfilter: 	lcddefault
