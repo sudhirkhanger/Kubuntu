@@ -17,6 +17,34 @@
 
     cat /proc/acpi/ibm/thermal
 	
+	/etc/thinkfan.conf
+find /sys/devices -type f -name "temp*_input"
+tp_fan /proc/acpi/ibm/fan
+hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input
+hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input
+hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp2_input
+hwmon /sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input
+
+(0,     0,      42)
+(1,     40,     47)
+(2,     45,     52)
+(3,     50,     57)
+(4,     55,     62)
+(5,     60,     67)
+(6,     65,     72)
+(7,     70,     77)
+(127,   75,     32767)
+
+/etc/default/thinkfan
+#Additional startup parameters
+START=yes
+DAEMON_ARGS="-q -b 1 -s 3"
+THINKFAN_ARGS="-c /etc/thinkfan.conf"
+
+systemctl enable thinkfan
+sudo thinkfan -n -b -5 -c /etc/thinkfan.conf
+
+	
 [Source](http://thinkwiki.de/Thinkfan)
 
 ## Temperature Sensors Widget
@@ -78,27 +106,40 @@
 	Identity=unix-user:*
 	Action=org.freedesktop.login1.hibernate
 	ResultActive=yes
+	
+	Create swap
+dd if=/dev/zero of=/swapfile bs=1M count=20480 status=progress
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+/etc/fstab
+/swapfile none swap defaults 0 0
+
+swapoff /swapfile
+rm -f /swapfile
+
+/etc/boot/grub
+GRUB_CMDLINE_LINUX_DEFAULT="resume= resume_offset="
+swap_device: findmnt -no UUID -T /swapfile
+swap_file_offset: filefrag -v /swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
+update-grub
+/etc/initramfs-tools/conf.d/resume
+RESUXME=UUID= resume_offset=
+update-initramfs -u -k all
 
 [Source](http://blog.mafr.de/2014/05/01/enabling-hibernate-support-in-ubuntu-14-04/)
-
-## ownCloud
-
-[Source](https://software.opensuse.org/download/package?project=isv:ownCloud:desktop&package=owncloud-client)
-
-## Oracle Java 8
-
-[Source](http://www.webupd8.org/2012/09/install-oracle-java-8-in-ubuntu-via-ppa.html)
 
 ## Android
 
 ### Install
 
-	sudo dpkg --add-architecture i386
-	sudo apt-get update
-	sudo apt-get install libncurses5:i386 libstdc++6:i386 zlib1g:i386
+	sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+
+[Source](https://developer.android.com/studio/install#linux)
 
 ### KVM
-	sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
+
+	sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils virtinst libvirt-daemon virt-manager
 	
 [Source](https://software.intel.com/en-us/blogs/2012/03/12/how-to-start-intel-hardware-assisted-virtualization-hypervisor-on-linux-to-speed-up-intel-android-x86-emulator)
 
@@ -107,14 +148,6 @@
 	cd /etc/udev/rules.d
 	wget https://raw.githubusercontent.com/M0Rf30/android-udev-rules/master/51-android.rules
 	chmod a+r /etc/udev/rules.d/51-android.rules
-
-## Ksuperkey
-
-	sudo add-apt-repository ppa:mehanik/ksuperkey
-	sudo apt-get update
-	sudo apt-get install ksuperkey
-
-	ksuperkey -e 'Super_L=Alt_L|F2'
 
 ## VirtualBox
 
@@ -168,8 +201,11 @@
 	sudo apt-get install tlp tlp-rdw tp-smapi-dkms acpi-call-dkms
 	
 [Source](http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
-	
 
+## NodeJs
+
+	sudo apt install nodejs npm
+	
 ## Xresources
 
 	! Xft settings ---------------------------------------------------------------
@@ -180,3 +216,40 @@
 	Xft.hinting:    true
 	Xft.hintstyle:  hintslight
 	Xft.lcdfilter: 	lcddefault
+	
+# VPN
+
+	sudo apt install openvpn resolvconf network-manager-openvpn
+
+# Misc
+
+	sudo apt install kwrite
+
+	sudo apt purge kate5-data skanlite muon kateE libkf5kdegames-data ktorrent-data
+
+# Backup
+
+* ~/.bashrc
+* ~/.bash_history
+* ~/.bash_aliases
+* ~/.ssh
+* ~/.config/emacs
+* ~/bin
+* ~/.config/autostart/add-ssh-keys-to-ssh-agent.sh.desktop
+* ~/.hidden
+* ~/.gradle/gradle.properties
+* OneTab export
+* Installations
+  * Snap
+  * Flatpak
+  * AppImage - IntelliJ Toolbox
+  * npm
+  * dnf
+  * sdkman
+  * Qt installer
+
+# SSH key permissions
+
+	chmod 700 ~/.ssh // ssh folder
+	chmod 600 * // private and authorized key
+	chmod 644 *.pub // public keys
