@@ -238,6 +238,7 @@ update-initramfs -u -k all
 * ~/.config/autostart/add-ssh-keys-to-ssh-agent.sh.desktop
 * ~/.hidden
 * ~/.gradle/gradle.properties
+* /etc/X11/xorg.conf.d/30-touchinput.conf
 * OneTab export
 * Installations
   * Snap
