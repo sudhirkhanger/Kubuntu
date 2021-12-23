@@ -49,65 +49,65 @@ sudo thinkfan -n -b -5 -c /etc/thinkfan.conf
 
 ## Temperature Sensors Widget
 
-    sudo apt-get install lm-sensors plasma-scriptengine-python
-    sudo sensors-detect
+sudo apt-get install lm-sensors plasma-scriptengine-python
+sudo sensors-detect
 
 ## Nvidia Optimus
 
-    sudo apt-get install bumblebee bumblebee-nvidia primus linux-headers-generic
+sudo apt-get install bumblebee bumblebee-nvidia primus linux-headers-generic
     
 ## VDPAU VAAPI
 
-    sudo apt-get install libvdpau1 vdpau-va-driver i965-va-driver vdpauinfo vainfo libvdpau-va-gl1
-    echo 'export VDPAU_DRIVER=va_gl' > ~/.bash_aliases
+sudo apt-get install libvdpau1 vdpau-va-driver i965-va-driver vdpauinfo vainfo libvdpau-va-gl1
+echo 'export VDPAU_DRIVER=va_gl' > ~/.bash_aliases
   
 ## Plasma Widgets
 
-    sudo apt-get install plasma-widget-homerun-kicker plasma-widget-redshift redshift
+sudo apt-get install plasma-widget-homerun-kicker plasma-widget-redshift redshift
   
 ## Emacs
 
-    sudo apt-get install emacs markdown emacs-goodies-el
+sudo apt-get install emacs markdown emacs-goodies-el
   
 ## Plasma Apps
 
-	sudo apt-get install konversation kwrite
+sudo apt-get install konversation kwrite
   
 ## Multimedia
   
-	sudo apt-get install kubuntu-restricted-extras vlc banshee easytag soundkonverter kffmpegthumbnailer kdegraphics-thumbnailers kdesdk-thumbnailers
+sudo apt-get install kubuntu-restricted-extras vlc banshee easytag soundkonverter kffmpegthumbnailer kdegraphics-thumbnailers kdesdk-thumbnailers
   
 ## Development
 
-	sudo apt-get install git
+sudo apt-get install git
   
 ## Others
 
-	sudo apt-get install keepassx ksshaskpass libreoffice-style-sifr kdeconnect deja-dup skype handbrake wine htop powertop
+sudo apt-get install keepassx ksshaskpass libreoffice-style-sifr kdeconnect deja-dup skype handbrake wine htop powertop
   
 ## Remove
 
-	sudo apt-get remove kate quassel-data brasero-common
+sudo apt-get remove kate quassel-data brasero-common
 
 ## Calibre
 
-	sudo -v && wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+sudo -v && wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 
 ## Hibernate
 
-	/etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
+/etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
 
-	[Re-enable hibernate by default in upower]
-	Identity=unix-user:*
-	Action=org.freedesktop.upower.hibernate
-	ResultActive=yes
+[Re-enable hibernate by default in upower]
+Identity=unix-user:*
+Action=org.freedesktop.upower.hibernate
+ResultActive=yes
 
-	[Re-enable hibernate by default in logind]
-	Identity=unix-user:*
-	Action=org.freedesktop.login1.hibernate
-	ResultActive=yes
+[Re-enable hibernate by default in logind]
+Identity=unix-user:*
+Action=org.freedesktop.login1.hibernate;org.freedesktop.login1.hibernate-multiple-sessions
+ResultActive=yes
 	
-	Create swap
+Create swap
 dd if=/dev/zero of=/swapfile bs=1M count=20480 status=progress
 chmod 600 /swapfile
 mkswap /swapfile
@@ -133,124 +133,101 @@ update-initramfs -u -k all
 
 ### Install
 
-	sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
 
 [Source](https://developer.android.com/studio/install#linux)
 
 ### KVM
 
-	sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils virtinst libvirt-daemon virt-manager
+sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils virtinst libvirt-daemon virt-manager
 	
 [Source](https://software.intel.com/en-us/blogs/2012/03/12/how-to-start-intel-hardware-assisted-virtualization-hypervisor-on-linux-to-speed-up-intel-android-x86-emulator)
 
 ### udev Rules
 
-	cd /etc/udev/rules.d
-	wget https://raw.githubusercontent.com/M0Rf30/android-udev-rules/master/51-android.rules
-	chmod a+r /etc/udev/rules.d/51-android.rules
+cd /etc/udev/rules.d
+wget https://raw.githubusercontent.com/M0Rf30/android-udev-rules/master/51-android.rules
+chmod a+r /etc/udev/rules.d/51-android.rules
 
 ## VirtualBox
 
-	wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-	sudo apt-get update
-	sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian trusty contrib' >> /etc/apt/sources.list.d/oracle-virtualbox.list"
-	sudo apt-get update
-	sudo apt-get install virtualbox-5.0
-	sudo usermod -a -G vboxusers $USER
+wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+sudo apt-get update
+sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian trusty contrib' >> /etc/apt/sources.list.d/oracle-virtualbox.list"
+sudo apt-get update
+sudo apt-get install virtualbox-5.0
+sudo usermod -a -G vboxusers $USER
 
 ## Genymotion
 
-	chmod +x genymotion-2.5.2_x64.bin
-	./genymotion-2.5.2_x64.bin
+chmod +x genymotion-2.5.2_x64.bin
+./genymotion-2.5.2_x64.bin
 
 ## Qt Creater
 
-	sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
-	sudo apt-get update
-	sudo apt-get install qtdeclarative5-examples qtdeclarative5-dev qmlscene qtcreator
+sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
+sudo apt-get update
+sudo apt-get install qtdeclarative5-examples qtdeclarative5-dev qmlscene qtcreator
 
 ## SimpleScreenReader
 
-	http://www.maartenbaert.be/simplescreenrecorder/#download
-	sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder
-	sudo apt-get update
-	sudo apt-get install simplescreenrecorder simplescreenrecorder-lib:i386
+http://www.maartenbaert.be/simplescreenrecorder/#download
+sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder
+sudo apt-get update
+sudo apt-get install simplescreenrecorder simplescreenrecorder-lib:i386
 
 ## Import GPG Keys
 
-	gpg --import secretkey.asc
-	gpg --edit-key KEYID trust
-	gpg --edit-key KEYID > Chose primary uid > primary > save
+gpg --import secretkey.asc
+gpg --edit-key KEYID trust
+gpg --edit-key KEYID > Chose primary uid > primary > save
 
 ## Inkscape
 
-	sudo add-apt-repository ppa:inkscape.dev/stable
-	sudo apt-get update
-	sudo apt-get install inkscape
+sudo add-apt-repository ppa:inkscape.dev/stable
+sudo apt-get update
+sudo apt-get install inkscape
 
 ## GIMP
 
-	sudo add-apt-repository ppa:otto-kesselgulasch/gimp
-	sudo apt-get update
-	sudo apt-get install gimp gimp-gmic gimp-plugin-registry
+sudo add-apt-repository ppa:otto-kesselgulasch/gimp
+sudo apt-get update
+sudo apt-get install gimp gimp-gmic gimp-plugin-registry
 	
 ## TLP
 
-	sudo add-apt-repository ppa:linrunner/tlp
-	sudo apt-get update
-	sudo apt-get install tlp tlp-rdw tp-smapi-dkms acpi-call-dkms
+sudo add-apt-repository ppa:linrunner/tlp
+sudo apt-get update
+sudo apt-get install tlp tlp-rdw tp-smapi-dkms acpi-call-dkms
 	
 [Source](http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
 ## NodeJs
 
-	sudo apt install nodejs npm
+sudo apt install nodejs npm
 	
 ## Xresources
 
-	! Xft settings ---------------------------------------------------------------
-	Xft.dpi:        96
-	Xft.antialias:  true
-	!Xft.rgba:      rgb
-	Xft.rgba:       none
-	Xft.hinting:    true
-	Xft.hintstyle:  hintslight
-	Xft.lcdfilter: 	lcddefault
+! Xft settings ---------------------------------------------------------------
+Xft.dpi:        96
+Xft.antialias:  true
+!Xft.rgba:      rgb
+Xft.rgba:       none
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+Xft.lcdfilter: 	lcddefault
 	
 # VPN
 
-	sudo apt install openvpn resolvconf network-manager-openvpn
+sudo apt install openvpn resolvconf network-manager-openvpn
 
 # Misc
 
-	sudo apt install kwrite
-
-	sudo apt purge kate5-data skanlite muon kateE libkf5kdegames-data ktorrent-data
-
-# Backup
-
-* ~/.bashrc
-* ~/.bash_history
-* ~/.bash_aliases
-* ~/.ssh
-* ~/.config/emacs
-* ~/bin
-* ~/.config/autostart/add-ssh-keys-to-ssh-agent.sh.desktop
-* ~/.hidden
-* ~/.gradle/gradle.properties
-* /etc/X11/xorg.conf.d/30-touchinput.conf
-* OneTab export
-* Installations
-  * Snap
-  * Flatpak
-  * AppImage - IntelliJ Toolbox
-  * npm
-  * dnf
-  * sdkman
-  * Qt installer
+sudo apt install kwrite
+sudo apt purge kate5-data skanlite muon kateE libkf5kdegames-data ktorrent-data
 
 # SSH key permissions
 
-	chmod 700 ~/.ssh // ssh folder
-	chmod 600 * // private and authorized key
-	chmod 644 *.pub // public keys
+chmod 700 ~/.ssh // ssh folder
+chmod 600 * // private and authorized key
+chmod 644 *.pub // public keys
