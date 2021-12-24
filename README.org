@@ -1,24 +1,25 @@
-## lm-sensors
+* lm-sensors
 
-    sudo apt-get install lm-sensors
-    sudo sensors-detect
+#+begin_src bash
+sudo apt-get install lm-sensors
+sudo sensors-detect
+#+end_src
     
-## Thinkfan
+* Thinkfan
 
-    sudo apt-get install thinkfan
-    echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkfan.conf
+** Installation
 
-    /etc/default/thinkfan
-    START=yes
-    DAEMON_ARGS="-q -b 1 -s 3"
+#+begin_src bash
+sudo apt-get install thinkfan
+echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkfan.conf
+#+end_src
 
-    /etc/thinkfan.conf
-    find /sys/devices -type f -name "temp*_input"
+** Config
 
-    cat /proc/acpi/ibm/thermal
-	
-	/etc/thinkfan.conf
+#+begin_src bash
+sudo emacs -nw /etc/thinkfan.conf
 find /sys/devices -type f -name "temp*_input"
+
 tp_fan /proc/acpi/ibm/fan
 hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input
 hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input
@@ -34,69 +35,113 @@ hwmon /sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input
 (6,     65,     72)
 (7,     70,     77)
 (127,   75,     32767)
+#+end_src
 
-/etc/default/thinkfan
+** Start config
+
+#+begin_src bash
+sudo emacs -nw /etc/default/thinkfan
 #Additional startup parameters
 START=yes
 DAEMON_ARGS="-q -b 1 -s 3"
 THINKFAN_ARGS="-c /etc/thinkfan.conf"
+#+end_src
 
-systemctl enable thinkfan
+** Enable
+
+#+begin_src bash
+sudo systemctl enable thinkfan
+#+end_src
+
+** Test
+
+#+begin_src bash
 sudo thinkfan -n -b -5 -c /etc/thinkfan.conf
+#+end_src
 
-	
-[Source](http://thinkwiki.de/Thinkfan)
+** Fan status
 
-## Temperature Sensors Widget
+#+begin_src bash
+cat /proc/acpi/ibm/thermal
+#+end_src
 
+[[http://thinkwiki.de/Thinkfan][Source]]
+
+* Temperature Sensors Widget
+
+#+begin_src bash
 sudo apt-get install lm-sensors plasma-scriptengine-python
 sudo sensors-detect
+#+end_src
 
-## Nvidia Optimus
+* Nvidia Optimus
 
+#+begin_src bash
 sudo apt-get install bumblebee bumblebee-nvidia primus linux-headers-generic
+#+end_src
     
-## VDPAU VAAPI
+* VDPAU VAAPI
 
+#+begin_src bash
 sudo apt-get install libvdpau1 vdpau-va-driver i965-va-driver vdpauinfo vainfo libvdpau-va-gl1
 echo 'export VDPAU_DRIVER=va_gl' > ~/.bash_aliases
+#+end_src
   
-## Plasma Widgets
+* Plasma Widgets
 
+#+begin_src bash
 sudo apt-get install plasma-widget-homerun-kicker plasma-widget-redshift redshift
+#+end_src
   
-## Emacs
+* Emacs
 
+#+begin_src bash
 sudo apt-get install emacs markdown emacs-goodies-el
+#+end_src
   
-## Plasma Apps
+* Plasma Apps
 
+#+begin_src bash
 sudo apt-get install konversation kwrite
+#+end_src
   
-## Multimedia
+* Multimedia
   
+#+begin_src bash
 sudo apt-get install kubuntu-restricted-extras vlc banshee easytag soundkonverter kffmpegthumbnailer kdegraphics-thumbnailers kdesdk-thumbnailers
+#+end_src
   
-## Development
+* Calibre
 
-sudo apt-get install git
-  
-## Others
-
-sudo apt-get install keepassx ksshaskpass libreoffice-style-sifr kdeconnect deja-dup skype handbrake wine htop powertop
-  
-## Remove
-
-sudo apt-get remove kate quassel-data brasero-common
-
-## Calibre
-
+#+begin_src bash
 sudo -v && wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+#+end_src
 
-## Hibernate
+* Hibernate
 
-/etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
+** Create Swap
 
+#+begin_src bash
+sudo dd if=/dev/zero of=/swapfile bs=1M count=20480 status=progress
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+#+end_src
+
+** Add to fstab
+
+#+begin_src bash
+sudo emacs -nw /etc/fstab
+
+/swapfile none swap defaults 0 0
+#+end_src
+
+** Enable hibernation for users
+
+#+begin_src bash
+sudo emacs -nw /etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
+
+# Add to the above file
 [Re-enable hibernate by default in upower]
 Identity=unix-user:*
 Action=org.freedesktop.upower.hibernate
@@ -106,108 +151,142 @@ ResultActive=yes
 Identity=unix-user:*
 Action=org.freedesktop.login1.hibernate;org.freedesktop.login1.hibernate-multiple-sessions
 ResultActive=yes
+#+end_src
 	
-Create swap
-dd if=/dev/zero of=/swapfile bs=1M count=20480 status=progress
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-/etc/fstab
-/swapfile none swap defaults 0 0
+** Remove swap
 
-swapoff /swapfile
-rm -f /swapfile
+#+begin_src bash
+sudo swapoff /swapfile
+sudo rm -f /swapfile
+#+end_src
 
-/etc/boot/grub
-GRUB_CMDLINE_LINUX_DEFAULT="resume= resume_offset="
-swap_device: findmnt -no UUID -T /swapfile
-swap_file_offset: filefrag -v /swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
-update-grub
-/etc/initramfs-tools/conf.d/resume
+** Swap from file
+
+#+begin_src bash
+# swap_device
+# Get swapfile UUID
+findmnt -no UUID -T /swapfile
+
+# swap_file_offset
+# Get file offset
+filefrag -v /swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}'
+
+sudo emacs -nw /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID= resume_offset="
+sudo update-grub
+
+sudo emacs -nw /etc/initramfs-tools/conf.d/resume
 RESUXME=UUID= resume_offset=
-update-initramfs -u -k all
+sudo update-initramfs -u -k all
+#+end_src
 
-[Source](http://blog.mafr.de/2014/05/01/enabling-hibernate-support-in-ubuntu-14-04/)
+[[http://blog.mafr.de/2014/05/01/enabling-hibernate-support-in-ubuntu-14-04/][Source]]
 
-## Android
+* Android
 
-### Install
+** Install
 
+#+begin_src bash
 sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+#+end_src
 
-[Source](https://developer.android.com/studio/install#linux)
+[[https://developer.android.com/studio/install#linux][Source]]
 
-### KVM
+** KVM
 
+#+begin_src bash
 sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils virtinst libvirt-daemon virt-manager
-	
-[Source](https://software.intel.com/en-us/blogs/2012/03/12/how-to-start-intel-hardware-assisted-virtualization-hypervisor-on-linux-to-speed-up-intel-android-x86-emulator)
+#+end_src
 
-### udev Rules
+[[https://software.intel.com/en-us/blogs/2012/03/12/how-to-start-intel-hardware-assisted-virtualization-hypervisor-on-linux-to-speed-up-intel-android-x86-emulator][Source]]
 
+** udev Rules
+
+#+begin_src bash
 cd /etc/udev/rules.d
 wget https://raw.githubusercontent.com/M0Rf30/android-udev-rules/master/51-android.rules
 chmod a+r /etc/udev/rules.d/51-android.rules
+#+end_src
 
-## VirtualBox
+* VirtualBox
 
+#+begin_src bash
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 sudo apt-get update
 sudo sh -c "echo 'deb http://download.virtualbox.org/virtualbox/debian trusty contrib' >> /etc/apt/sources.list.d/oracle-virtualbox.list"
 sudo apt-get update
 sudo apt-get install virtualbox-5.0
 sudo usermod -a -G vboxusers $USER
+#+end_src
 
-## Genymotion
+* Genymotion
 
+#+begin_src bash
 chmod +x genymotion-2.5.2_x64.bin
 ./genymotion-2.5.2_x64.bin
+#+end_src
 
-## Qt Creater
+* Qt Creater
 
+#+begin_src bash
 sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
 sudo apt-get update
 sudo apt-get install qtdeclarative5-examples qtdeclarative5-dev qmlscene qtcreator
+#+end_src
 
-## SimpleScreenReader
+* SimpleScreenReader
 
-http://www.maartenbaert.be/simplescreenrecorder/#download
+#+begin_src bash
 sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder
 sudo apt-get update
 sudo apt-get install simplescreenrecorder simplescreenrecorder-lib:i386
+#+end_src
 
-## Import GPG Keys
+[[http://www.maartenbaert.be/simplescreenrecorder/#download][Source]]
 
+* Import GPG Keys
+
+#+begin_src bash
 gpg --import secretkey.asc
 gpg --edit-key KEYID trust
 gpg --edit-key KEYID > Chose primary uid > primary > save
+#+end_src
 
-## Inkscape
+* Inkscape
 
+#+begin_src bash
 sudo add-apt-repository ppa:inkscape.dev/stable
 sudo apt-get update
 sudo apt-get install inkscape
+#+end_src
 
-## GIMP
+* GIMP
 
+#+begin_src bash
 sudo add-apt-repository ppa:otto-kesselgulasch/gimp
 sudo apt-get update
 sudo apt-get install gimp gimp-gmic gimp-plugin-registry
+#+end_src
 	
-## TLP
+* TLP
 
+#+begin_src bash
 sudo add-apt-repository ppa:linrunner/tlp
 sudo apt-get update
 sudo apt-get install tlp tlp-rdw tp-smapi-dkms acpi-call-dkms
+#+end_src
 	
 [Source](http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
-## NodeJs
+* NodeJs
 
+#+begin_src bash
 sudo apt install nodejs npm
+#+end_src
 	
-## Xresources
+* Xresources
 
+#+begin_src bash
 ! Xft settings ---------------------------------------------------------------
 Xft.dpi:        96
 Xft.antialias:  true
@@ -216,18 +295,34 @@ Xft.rgba:       none
 Xft.hinting:    true
 Xft.hintstyle:  hintslight
 Xft.lcdfilter: 	lcddefault
+#+end_src
 	
-# VPN
+* VPN
 
+#+begin_src bash
 sudo apt install openvpn resolvconf network-manager-openvpn
+#+end_src
 
-# Misc
+* Tools
 
-sudo apt install kwrite
-sudo apt purge kate5-data skanlite muon kateE libkf5kdegames-data ktorrent-data
+#+begin_src bash
+sudo apt install kwrite keepassx ksshaskpass libreoffice-style-sifr kdeconnect deja-dup skype handbrake wine htop powertop
+#+end_src
 
-# SSH key permissions
+* Remove
 
-chmod 700 ~/.ssh // ssh folder
-chmod 600 * // private and authorized key
-chmod 644 *.pub // public keys
+#+begin_src bash
+sudo apt purge kate5-data skanlite muon kate libkf5kdegames-data ktorrent-data quassel-data brasero-common
+#+end_src
+
+* SSH key permissions
+
+#+begin_src bash
+# SSH folder
+chmod 700 ~/.ssh
+# private and authorized keys
+cd ~/.ssh
+chmod 600 *
+# public keys
+chmod 644 *.pub
+#+end_src
