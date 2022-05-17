@@ -326,3 +326,53 @@ chmod 600 *
 # public keys
 chmod 644 *.pub
 #+end_src
+
+* Dell Fan
+
+** See fans with =sensors= and add =dell-smm-hwmon= to modules
+
+#+begin_src bash
+sudo su
+echo "options dell-smm-hwmon restricted=0 force=1" > /etc/modprobe.d/dell-smm-hwmon.conf
+echo "dell-smm-hwmon" > /etc/modules
+exit
+sudo update-initramfs -u
+
+# Actual
+
+$ cat /etc/modprobe.d/dell-smm-hwmon.conf
+# This file must be at /etc/modprobe.d/
+options dell-smm-hwmon restricted=0
+
+$ cat /etc/modules
+i8k
+#+end_src
+
+** Control fan via =i8kutils=
+
+#+begin_src bash
+sudo apt install i8kutils
+sudo su 
+echo "i8k" >> /etc/modules
+echo "options i8k force=1" > /etc/modprobe.d/i8k.conf
+exit
+
+# Reboot
+sudo modprobe i8k force=1
+
+# Config
+/etc/i8kmon.conf
+#+end_src
+
+** Disable Dell BIOS fan control via =dell-bios-fan-control=
+
+#+begin_src bash
+git clone https://github.com/TomFreudenberg/dell-bios-fan-control.git
+cd dell-bios-fan-control
+make
+sudo dell-bios-fan-control 0
+#+end_src
+
+[[https://askubuntu.com/questions/1094485/dell-xps-15-9570-how-to-control-the-fans][AskUbuntu]]
+[[https://github.com/TomFreudenberg/dell-bios-fan-control][dell-bios-fan-control]]
+[[https://keenformatics.blogspot.com/2013/06/how-to-solve-dell-laptops-fan-issues-in.html][Dell Fan Issues]]
