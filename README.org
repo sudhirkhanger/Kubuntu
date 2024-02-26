@@ -231,7 +231,7 @@ sudo apt install openvpn resolvconf network-manager-openvpn
 * Tools
 
 #+begin_src bash
-sudo apt install kwrite keepassx ksshaskpass libreoffice-style-sifr deja-dup handbrake htop powertop
+sudo apt install kwrite keepassx ksshaskpass libreoffice-style-sifr deja-dup handbrake htop powertop libimage-exiftool-perl mat2
 #+end_src
 
 * SSH key permissions
