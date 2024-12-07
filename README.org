@@ -144,13 +144,6 @@ sudo apt-get install virtualbox-5.0
 sudo usermod -a -G vboxusers $USER
 #+end_src
 
-* Genymotion
-
-#+begin_src bash
-chmod +x genymotion-2.5.2_x64.bin
-./genymotion-2.5.2_x64.bin
-#+end_src
-
 * Qt Creater
 
 #+begin_src bash
@@ -311,6 +304,14 @@ sudo dell-bios-fan-control 0
 [[https://askubuntu.com/questions/1094485/dell-xps-15-9570-how-to-control-the-fans][AskUbuntu]]
 [[https://github.com/TomFreudenberg/dell-bios-fan-control][dell-bios-fan-control]]
 [[https://keenformatics.blogspot.com/2013/06/how-to-solve-dell-laptops-fan-issues-in.html][Dell Fan Issues]]
+
+-----
+
+#+begin_comment
+The following section is not applicable for the Dell Laptop
+#+end_comment
+
+
 
 * Thinkfan
 
