@@ -1,10 +1,3 @@
-* lm-sensors
-
-#+begin_src bash
-sudo apt-get install lm-sensors
-sudo sensors-detect
-#+end_src
-
 * Nvidia Optimus
 
 #+begin_src bash
@@ -44,6 +37,12 @@ sudo -v && wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/mas
 
 * Hibernate
 
+** Check Swap
+
+#+begin_src bash
+swapon --show
+#+end_src
+
 ** Create Swap
 
 #+begin_src bash
@@ -59,30 +58,6 @@ sudo swapon /swapfile
 sudo emacs -nw /etc/fstab
 
 /swapfile none swap defaults 0 0
-#+end_src
-
-** Enable hibernation for users
-
-#+begin_src bash
-sudo emacs -nw /etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla
-
-# Add to the above file
-[Re-enable hibernate by default in upower]
-Identity=unix-user:*
-Action=org.freedesktop.upower.hibernate
-ResultActive=yes
-
-[Re-enable hibernate by default in logind]
-Identity=unix-user:*
-Action=org.freedesktop.login1.hibernate;org.freedesktop.login1.hibernate-multiple-sessions
-ResultActive=yes
-#+end_src
-	
-** Remove swap
-
-#+begin_src bash
-sudo swapoff /swapfile
-sudo rm -f /swapfile
 #+end_src
 
 ** Swap from file
@@ -101,11 +76,35 @@ GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID= resume_offset="
 sudo update-grub
 
 sudo emacs -nw /etc/initramfs-tools/conf.d/resume
-RESUXME=UUID= resume_offset=
+RESUME=UUID= resume_offset=
 sudo update-initramfs -u -k all
 #+end_src
 
-[[http://blog.mafr.de/2014/05/01/enabling-hibernate-support-in-ubuntu-14-04/][Source]]
+** Remove swap
+
+#+begin_src bash
+sudo swapoff /swapfile
+sudo rm -f /swapfile
+#+end_src
+
+** Enable hibernation for users
+
+#+begin_src bash
+sudo nano /etc/polkit-1/rules.d/10-enable-hibernate.rules
+
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.login1.hibernate" ||
+        action.id == "org.freedesktop.login1.hibernate-multiple-sessions" ||
+        action.id == "org.freedesktop.upower.hibernate" ||
+        action.id == "org.freedesktop.login1.handle-hibernate-key" ||
+        action.id == "org.freedesktop.login1.hibernate-ignore-inhibit")
+    {
+        return polkit.Result.YES;
+    }
+});
+#+end_src
+
+[[https://ubuntuhandbook.org/index.php/2021/08/enable-hibernate-ubuntu-21-10/][Source]]
 
 * Android
 
@@ -311,8 +310,6 @@ sudo dell-bios-fan-control 0
 The following section is not applicable for the Dell Laptop
 #+end_comment
 
-
-
 * Thinkfan
 
 ** Installation
@@ -381,3 +378,21 @@ cat /proc/acpi/ibm/thermal
 sudo apt-get install lm-sensors plasma-scriptengine-python
 sudo sensors-detect
 #+end_src
+
+* Audio not working
+#+begin_src bash
+/etc/modprobe.d/blacklist.conf // can also create its own file
+blacklist snd_soc_avs
+#+end_src
+
+* Version Upgrade
+#+begin_src bash
+sudo apt-get update && sudo apt-get dist-upgrade
+
+sudo software-properties-qt or /etc/update-manager/release-upgrades
+
+graphical - pkexec do-release-upgrade -m desktop -f DistUpgradeViewKDE
+commandline - sudo do-release-upgrade -m desktop
+#+end_src
+
+[[https://help.ubuntu.com/community/OracularUpgrades/Kubuntu][Source]]
