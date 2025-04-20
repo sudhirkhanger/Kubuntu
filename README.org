@@ -300,11 +300,9 @@ make
 sudo dell-bios-fan-control 0
 #+end_src
 
-[[https://askubuntu.com/questions/1094485/dell-xps-15-9570-how-to-control-the-fans][AskUbuntu]]
-
-[[https://github.com/TomFreudenberg/dell-bios-fan-control][dell-bios-fan-control]]
-
-[[https://keenformatics.blogspot.com/2013/06/how-to-solve-dell-laptops-fan-issues-in.html][Dell Fan Issues]]
+- [[https://askubuntu.com/questions/1094485/dell-xps-15-9570-how-to-control-the-fans][AskUbuntu]]
+- [[https://github.com/TomFreudenberg/dell-bios-fan-control][dell-bios-fan-control]]
+- [[https://keenformatics.blogspot.com/2013/06/how-to-solve-dell-laptops-fan-issues-in.html][Dell Fan Issues]]
 
 * Temperature Sensors Widget
 
