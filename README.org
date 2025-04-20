@@ -106,6 +106,14 @@ polkit.addRule(function(action, subject) {
 
 [[https://ubuntuhandbook.org/index.php/2021/08/enable-hibernate-ubuntu-21-10/][Source]]
 
+* KVM
+
+#+begin_src bash
+sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils virtinst libvirt-daemon virt-manager
+#+end_src
+
+[[https://software.intel.com/en-us/blogs/2012/03/12/how-to-start-intel-hardware-assisted-virtualization-hypervisor-on-linux-to-speed-up-intel-android-x86-emulator][Source]]
+
 * Android
 
 ** Install
@@ -115,14 +123,6 @@ sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-
 #+end_src
 
 [[https://developer.android.com/studio/install#linux][Source]]
-
-** KVM
-
-#+begin_src bash
-sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils virtinst libvirt-daemon virt-manager
-#+end_src
-
-[[https://software.intel.com/en-us/blogs/2012/03/12/how-to-start-intel-hardware-assisted-virtualization-hypervisor-on-linux-to-speed-up-intel-android-x86-emulator][Source]]
 
 ** udev Rules
 
@@ -169,6 +169,31 @@ gpg --edit-key KEYID trust
 gpg --edit-key KEYID > Chose primary uid > primary > save
 #+end_src
 
+* SSH key permissions
+
+#+begin_src bash
+# SSH folder
+chmod 700 ~/.ssh
+# private and authorized keys
+cd ~/.ssh
+chmod 600 *
+# public keys
+chmod 644 *.pub
+#+end_src
+
+* Xresources
+
+#+begin_src bash
+! Xft settings ---------------------------------------------------------------
+Xft.dpi:        96
+Xft.antialias:  true
+!Xft.rgba:      rgb
+Xft.rgba:       none
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+Xft.lcdfilter: 	lcddefault
+#+end_src
+
 * Inkscape
 
 #+begin_src bash
@@ -193,25 +218,12 @@ sudo apt-get update
 sudo apt-get install tlp tlp-rdw tp-smapi-dkms acpi-call-dkms
 #+end_src
 	
-[Source](http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
+[[http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation][Source]]
 
 * NodeJs
 
 #+begin_src bash
 sudo apt install nodejs npm
-#+end_src
-	
-* Xresources
-
-#+begin_src bash
-! Xft settings ---------------------------------------------------------------
-Xft.dpi:        96
-Xft.antialias:  true
-!Xft.rgba:      rgb
-Xft.rgba:       none
-Xft.hinting:    true
-Xft.hintstyle:  hintslight
-Xft.lcdfilter: 	lcddefault
 #+end_src
 	
 * VPN
@@ -224,18 +236,6 @@ sudo apt install openvpn resolvconf network-manager-openvpn
 
 #+begin_src bash
 sudo apt install kwrite keepassx ksshaskpass libreoffice-style-sifr deja-dup handbrake htop powertop libimage-exiftool-perl mat2
-#+end_src
-
-* SSH key permissions
-
-#+begin_src bash
-# SSH folder
-chmod 700 ~/.ssh
-# private and authorized keys
-cd ~/.ssh
-chmod 600 *
-# public keys
-chmod 644 *.pub
 #+end_src
 
 * Dell Fan
@@ -301,76 +301,10 @@ sudo dell-bios-fan-control 0
 #+end_src
 
 [[https://askubuntu.com/questions/1094485/dell-xps-15-9570-how-to-control-the-fans][AskUbuntu]]
+
 [[https://github.com/TomFreudenberg/dell-bios-fan-control][dell-bios-fan-control]]
+
 [[https://keenformatics.blogspot.com/2013/06/how-to-solve-dell-laptops-fan-issues-in.html][Dell Fan Issues]]
-
------
-
-#+begin_comment
-The following section is not applicable for the Dell Laptop
-#+end_comment
-
-* Thinkfan
-
-** Installation
-
-#+begin_src bash
-sudo apt-get install thinkfan
-echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkfan.conf
-#+end_src
-
-** Config
-
-#+begin_src bash
-sudo emacs -nw /etc/thinkfan.conf
-find /sys/devices -type f -name "temp*_input"
-
-tp_fan /proc/acpi/ibm/fan
-hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input
-hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input
-hwmon /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp2_input
-hwmon /sys/devices/virtual/thermal/thermal_zone0/hwmon1/temp1_input
-
-(0,     0,      42)
-(1,     40,     47)
-(2,     45,     52)
-(3,     50,     57)
-(4,     55,     62)
-(5,     60,     67)
-(6,     65,     72)
-(7,     70,     77)
-(127,   75,     32767)
-#+end_src
-
-** Start config
-
-#+begin_src bash
-sudo emacs -nw /etc/default/thinkfan
-#Additional startup parameters
-START=yes
-DAEMON_ARGS="-q -b 1 -s 3"
-THINKFAN_ARGS="-c /etc/thinkfan.conf"
-#+end_src
-
-** Enable
-
-#+begin_src bash
-sudo systemctl enable thinkfan
-#+end_src
-
-** Test
-
-#+begin_src bash
-sudo thinkfan -n -b -5 -c /etc/thinkfan.conf
-#+end_src
-
-** Fan status
-
-#+begin_src bash
-cat /proc/acpi/ibm/thermal
-#+end_src
-
-[[http://thinkwiki.de/Thinkfan][Source]]
 
 * Temperature Sensors Widget
 
